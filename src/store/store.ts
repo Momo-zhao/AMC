@@ -14,7 +14,13 @@ const UseStore = {
     reducer: (state = UseStore.defaultResultInfo, action) => {
         switch (action.type) {
             case UseStore.SAVE_RESULT:
-                return action.resultInfo || {}
+                for (const key in action.resultInfo) {
+                    if (Object.prototype.hasOwnProperty.call(action.resultInfo, key)) {
+                        const element = action.resultInfo[key];
+                        state[key] = element
+                    }
+                }
+                return state
             default:
                 return state
         }

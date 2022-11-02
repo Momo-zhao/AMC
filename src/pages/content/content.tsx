@@ -3,6 +3,8 @@ import { Component, PropsWithChildren } from 'react'
 import { RadioGroup, Label, Radio, Text, View, Button} from '@tarojs/components'
 import './index.scss'
 import { toTargetPage } from '../../components/utils'
+import { store } from '../../store/index'
+import UseStore from '../../store/store'
 
 interface optionType {
   id: string,
@@ -44,9 +46,7 @@ export default class Content extends Component<PropsWithChildren> {
         checked:false
       }]
     },
-    answer: {
-      '': ''
-    },
+    answer: {},
     url: '/pages/content/content',
     resultUrl: '/pages/result/result',
 
@@ -76,6 +76,7 @@ export default class Content extends Component<PropsWithChildren> {
     }
     const answer = this.state.answer;
     answer[this.state.data.id] = val
+    store.dispatch(UseStore.action.save(answer))
     this.setState({
       data: newOption,
       answer
@@ -86,7 +87,10 @@ export default class Content extends Component<PropsWithChildren> {
       if(this.id < '2') {
         toTargetPage(this.state.url, {year: this.year, id: +this.id + 1 + ''})
       }else {
+        const result = store.getState() // result为获取的全局state存储数据
         // 将所有答案发送给后端
+        // 。。。
+        // 获取后端返回的结果+跳转结果页
         toTargetPage(this.state.resultUrl, {year: this.year})
       }
     }
